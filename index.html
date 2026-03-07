@@ -60,6 +60,100 @@
       display: flex;
     }
 
+    /* ======================================
+       PIN SCREEN
+    ====================================== */
+    #pin-screen {
+      background: rgba(0,0,0,0.85);
+    }
+
+    #pin-screen h2 {
+      font-size: 42px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #pin-screen p {
+      font-size: 22px;
+      opacity: 0.7;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    /* PIN dots display */
+    .pin-dots {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .pin-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.5);
+      background: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .pin-dot.filled {
+      background: white;
+      border-color: white;
+    }
+
+    .pin-dot.error {
+      background: #ef4444;
+      border-color: #ef4444;
+    }
+
+    /* PIN error message */
+    #pin-error {
+      font-size: 22px;
+      color: #ef4444;
+      margin-bottom: 20px;
+      height: 30px;
+      text-align: center;
+    }
+
+    /* Number keypad */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 340px;
+    }
+
+    .key {
+      height: 90px;
+      border: none;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-size: 36px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .key:active {
+      background: rgba(255,255,255,0.35);
+      transform: scale(0.95);
+    }
+
+    .key.key-delete {
+      font-size: 28px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .key.key-empty {
+      background: transparent;
+      cursor: default;
+    }
+
+    /* ======================================
+       WELCOME SCREEN
+    ====================================== */
     #welcome-screen .emoji {
       font-size: 90px;
       margin-bottom: 20px;
@@ -99,6 +193,9 @@
       transform: scale(0.97);
     }
 
+    /* ======================================
+       COUNTDOWN SCREEN
+    ====================================== */
     #countdown-screen h2 {
       font-size: 42px;
       font-weight: 600;
@@ -120,6 +217,9 @@
       text-align: center;
     }
 
+    /* ======================================
+       RECORDING SCREEN
+    ====================================== */
     #recording-screen {
       justify-content: space-between;
       padding: 30px 30px 50px 30px;
@@ -213,6 +313,9 @@
       transform: scale(0.97);
     }
 
+    /* ======================================
+       REVIEW SCREEN
+    ====================================== */
     #review-screen {
       background: rgba(0,0,0,0.7);
     }
@@ -277,6 +380,9 @@
       line-height: 1.3;
     }
 
+    /* ======================================
+       UPLOADING SCREEN
+    ====================================== */
     #uploading-screen {
       background: rgba(0,0,0,0.75);
     }
@@ -307,6 +413,9 @@
       margin-top: 12px;
     }
 
+    /* ======================================
+       THANK YOU SCREEN
+    ====================================== */
     #thankyou-screen {
       background: rgba(0,0,0,0.75);
     }
@@ -329,6 +438,9 @@
       text-align: center;
     }
 
+    /* ======================================
+       ERROR SCREEN
+    ====================================== */
     #error-screen {
       background: rgba(0,0,0,0.8);
     }
@@ -371,19 +483,63 @@
   <video id="camera-feed" autoplay muted playsinline></video>
   <div id="overlay"></div>
 
-  <div class="screen active" id="welcome-screen">
+  <!-- ==========================================
+       SCREEN 0 - PIN ENTRY
+  =========================================== -->
+  <div class="screen" id="pin-screen">
+    <h2>🎉 Welcome!</h2>
+    <p>Please enter the party PIN to continue</p>
+
+    <!-- PIN dots -->
+    <div class="pin-dots">
+      <div class="pin-dot" id="dot-0"></div>
+      <div class="pin-dot" id="dot-1"></div>
+      <div class="pin-dot" id="dot-2"></div>
+      <div class="pin-dot" id="dot-3"></div>
+    </div>
+
+    <!-- Error message -->
+    <div id="pin-error"></div>
+
+    <!-- Number keypad -->
+    <div class="keypad">
+      <button class="key" onclick="pinPress('1')">1</button>
+      <button class="key" onclick="pinPress('2')">2</button>
+      <button class="key" onclick="pinPress('3')">3</button>
+      <button class="key" onclick="pinPress('4')">4</button>
+      <button class="key" onclick="pinPress('5')">5</button>
+      <button class="key" onclick="pinPress('6')">6</button>
+      <button class="key" onclick="pinPress('7')">7</button>
+      <button class="key" onclick="pinPress('8')">8</button>
+      <button class="key" onclick="pinPress('9')">9</button>
+      <button class="key key-empty"></button>
+      <button class="key" onclick="pinPress('0')">0</button>
+      <button class="key key-delete" onclick="pinDelete()">⌫</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       SCREEN 1 - WELCOME
+  =========================================== -->
+  <div class="screen" id="welcome-screen">
     <div class="emoji">🎉</div>
     <h1>Leave Us a<br>Video Message!</h1>
     <p>Press START and say hello!</p>
     <button class="btn-start" onclick="startCountdown()">START</button>
   </div>
 
+  <!-- ==========================================
+       SCREEN 2 - COUNTDOWN
+  =========================================== -->
   <div class="screen" id="countdown-screen">
     <h2>Get Ready...</h2>
     <div id="countdown-number">10</div>
     <p>Recording starts when the timer reaches 0</p>
   </div>
 
+  <!-- ==========================================
+       SCREEN 3 - RECORDING
+  =========================================== -->
   <div class="screen" id="recording-screen">
     <div class="rec-top-bar">
       <div class="rec-indicator">
@@ -399,6 +555,9 @@
     <button class="btn-finish" onclick="finishRecording()">FINISH</button>
   </div>
 
+  <!-- ==========================================
+       SCREEN 4 - REVIEW
+  =========================================== -->
   <div class="screen" id="review-screen">
     <h2>Great job! 🎬</h2>
     <p>Are you pleased with your video,<br>or would you like to record again?</p>
@@ -414,18 +573,27 @@
     </div>
   </div>
 
+  <!-- ==========================================
+       SCREEN 5 - UPLOADING
+  =========================================== -->
   <div class="screen" id="uploading-screen">
     <div class="spinner"></div>
     <h2>Saving your message...</h2>
     <p>Please wait a moment</p>
   </div>
 
+  <!-- ==========================================
+       SCREEN 6 - THANK YOU
+  =========================================== -->
   <div class="screen" id="thankyou-screen">
     <div class="big-emoji">🎉</div>
     <h2>Thank You!</h2>
     <p>Your message has been saved.<br>Enjoy the party! 🥳</p>
   </div>
 
+  <!-- ==========================================
+       SCREEN 7 - ERROR
+  =========================================== -->
   <div class="screen" id="error-screen">
     <div class="big-emoji">😕</div>
     <h2>Something went wrong</h2>
@@ -438,6 +606,13 @@
     // ---- YOUR APPS SCRIPT URL ----
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwBQdsq21l7yB65lZ2fc6a4IKhTdtz2DM4FPXsJOmnb-7fJ2Lki3I2STJhm4qQ4ZG7wTg/exec";
 
+    // ---- PIN ----
+    const CORRECT_PIN = "0411";
+    const PIN_STORAGE_KEY = "party_pin_verified";
+
+    // ============================================
+    // VARIABLES
+    // ============================================
     let mediaRecorder = null;
     let recordedChunks = [];
     let videoStream = null;
@@ -447,35 +622,110 @@
     let recordingSeconds = 0;
     let isRecording = false;
     let currentMimeType = "video/mp4";
-
-    // ============================================
-    // THIS FUNCTION MUST BE IN THE HTML FILE
-    // Detects what video format the device supports
-    // ============================================
-    function getMimeType() {
-      const types = [
-        "video/mp4",
-        "video/mp4; codecs=avc1",
-        "video/webm; codecs=vp8,opus",
-        "video/webm"
-      ];
-      for (const type of types) {
-        if (MediaRecorder.isTypeSupported(type)) {
-          console.log("Using mime type: " + type);
-          return type;
-        }
-      }
-      console.log("No supported type found, using default");
-      return "";
-    }
+    let currentPin = "";
 
     // ============================================
     // STARTUP
     // ============================================
     window.addEventListener("load", () => {
       startCamera();
+      checkPin();
     });
 
+    // Check if this device has already entered the PIN
+    function checkPin() {
+      const verified = localStorage.getItem(PIN_STORAGE_KEY);
+      if (verified === "true") {
+        // Device already verified - go straight to welcome
+        showScreen("welcome-screen");
+      } else {
+        // First time on this device - show PIN screen
+        showScreen("pin-screen");
+      }
+    }
+
+    // ============================================
+    // PIN LOGIC
+    // ============================================
+    function pinPress(digit) {
+      if (currentPin.length >= 4) return;
+
+      currentPin += digit;
+
+      // Update dots
+      updatePinDots();
+
+      // Auto check when 4 digits entered
+      if (currentPin.length === 4) {
+        setTimeout(() => checkPinEntry(), 200);
+      }
+    }
+
+    function pinDelete() {
+      if (currentPin.length === 0) return;
+      currentPin = currentPin.slice(0, -1);
+      updatePinDots();
+      document.getElementById("pin-error").textContent = "";
+      resetDotColors();
+    }
+
+    function updatePinDots() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById("dot-" + i);
+        if (i < currentPin.length) {
+          dot.classList.add("filled");
+        } else {
+          dot.classList.remove("filled");
+        }
+      }
+    }
+
+    function checkPinEntry() {
+      if (currentPin === CORRECT_PIN) {
+        // Correct! Save to localStorage so this device never needs PIN again
+        localStorage.setItem(PIN_STORAGE_KEY, "true");
+
+        // Flash dots green briefly then go to welcome
+        for (let i = 0; i < 4; i++) {
+          const dot = document.getElementById("dot-" + i);
+          dot.style.background = "#22c55e";
+          dot.style.borderColor = "#22c55e";
+        }
+
+        setTimeout(() => {
+          showScreen("welcome-screen");
+        }, 500);
+
+      } else {
+        // Wrong PIN - shake and reset
+        for (let i = 0; i < 4; i++) {
+          const dot = document.getElementById("dot-" + i);
+          dot.classList.add("error");
+          dot.classList.remove("filled");
+        }
+
+        document.getElementById("pin-error").textContent = "Incorrect PIN. Please try again.";
+
+        setTimeout(() => {
+          currentPin = "";
+          resetDotColors();
+          updatePinDots();
+        }, 1000);
+      }
+    }
+
+    function resetDotColors() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById("dot-" + i);
+        dot.classList.remove("error", "filled");
+        dot.style.background = "";
+        dot.style.borderColor = "";
+      }
+    }
+
+    // ============================================
+    // CAMERA
+    // ============================================
     async function startCamera() {
       try {
         videoStream = await navigator.mediaDevices.getUserMedia({
@@ -491,6 +741,25 @@
         console.error("Camera error:", err);
         showError("Could not access the camera. Please make sure you have allowed camera access.");
       }
+    }
+
+    // ============================================
+    // MIME TYPE DETECTION
+    // ============================================
+    function getMimeType() {
+      const types = [
+        "video/mp4",
+        "video/mp4; codecs=avc1",
+        "video/webm; codecs=vp8,opus",
+        "video/webm"
+      ];
+      for (const type of types) {
+        if (MediaRecorder.isTypeSupported(type)) {
+          console.log("Using mime type: " + type);
+          return type;
+        }
+      }
+      return "";
     }
 
     // ============================================
@@ -538,10 +807,8 @@
       document.getElementById("warn-seconds").textContent = "10 seconds remaining";
       document.getElementById("rec-timer").textContent = "0:00";
 
-      // Get the best supported mime type for this device
       currentMimeType = getMimeType();
 
-      // Set up MediaRecorder
       try {
         if (currentMimeType) {
           mediaRecorder = new MediaRecorder(videoStream, { mimeType: currentMimeType });
@@ -554,8 +821,6 @@
         mediaRecorder = new MediaRecorder(videoStream);
         currentMimeType = mediaRecorder.mimeType;
       }
-
-      console.log("Recording with:", currentMimeType);
 
       mediaRecorder.ondataavailable = (event) => {
         if (event.data && event.data.size > 0) {
@@ -570,7 +835,6 @@
 
       mediaRecorder.start(1000);
 
-      // Blink REC dot
       let dotVisible = true;
       blinkTimer = setInterval(() => {
         dotVisible = !dotVisible;
@@ -578,7 +842,6 @@
         dot.classList.toggle("blink", !dotVisible);
       }, 500);
 
-      // Recording timer
       recordingTimer = setInterval(() => {
         recordingSeconds++;
 
@@ -644,7 +907,6 @@
     // ============================================
     async function uploadToGoogleDrive() {
       try {
-        // Use the mime type that was detected when recording started
         const blob = new Blob(recordedChunks, { type: currentMimeType });
 
         console.log("Uploading blob size:", blob.size, "type:", currentMimeType);
