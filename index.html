@@ -446,18 +446,22 @@
     let blinkTimer = null;
     let recordingSeconds = 0;
     let isRecording = false;
-    let currentMimeType = "video/mp4";
+    let currentMimeType = "video/webm";
 
     // ============================================
     // THIS FUNCTION MUST BE IN THE HTML FILE
     // Detects what video format the device supports
+    // WebM is prioritized for smaller file sizes
     // ============================================
     function getMimeType() {
       const types = [
-        "video/mp4",
-        "video/mp4; codecs=avc1",
+        "video/webm; codecs=vp9,opus",
         "video/webm; codecs=vp8,opus",
-        "video/webm"
+        "video/webm; codecs=vp9",
+        "video/webm; codecs=vp8",
+        "video/webm",
+        "video/mp4",
+        "video/mp4; codecs=avc1"
       ];
       for (const type of types) {
         if (MediaRecorder.isTypeSupported(type)) {
@@ -538,21 +542,31 @@
       document.getElementById("warn-seconds").textContent = "10 seconds remaining";
       document.getElementById("rec-timer").textContent = "0:00";
 
-      // Get the best supported mime type for this device
+      // Get the best supported mime type — WebM preferred for smaller files
       currentMimeType = getMimeType();
 
       // Set up MediaRecorder
       try {
         if (currentMimeType) {
-          mediaRecorder = new MediaRecorder(videoStream, { mimeType: currentMimeType });
+          mediaRecorder = new MediaRecorder(videoStream, {
+            mimeType: currentMimeType,
+            videoBitsPerSecond: 1500000  // 1.5 Mbps — good quality, smaller files
+          });
         } else {
           mediaRecorder = new MediaRecorder(videoStream);
           currentMimeType = mediaRecorder.mimeType;
         }
       } catch (e) {
         console.log("MediaRecorder fallback:", e);
-        mediaRecorder = new MediaRecorder(videoStream);
-        currentMimeType = mediaRecorder.mimeType;
+        try {
+          mediaRecorder = new MediaRecorder(videoStream, {
+            mimeType: currentMimeType
+          });
+        } catch (e2) {
+          console.log("MediaRecorder second fallback:", e2);
+          mediaRecorder = new MediaRecorder(videoStream);
+          currentMimeType = mediaRecorder.mimeType;
+        }
       }
 
       console.log("Recording with:", currentMimeType);
@@ -648,6 +662,7 @@
         const blob = new Blob(recordedChunks, { type: currentMimeType });
 
         console.log("Uploading blob size:", blob.size, "type:", currentMimeType);
+        console.log("File size (MB):", (blob.size / 1024 / 1024).toFixed(2));
 
         if (blob.size === 0) {
           throw new Error("Video has no data");
